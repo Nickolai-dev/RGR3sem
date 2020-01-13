@@ -30,8 +30,12 @@ public class WallMesh : MonoBehaviour {
             Destroy(i);
     }
 
-    void Cancel() {
+    void Cancel(Vector3 pos) {
         stagingNodes.Clear();
+        RaycastHit2D[] hits = Physics2D.RaycastAll(pos, new Vector2());
+        foreach( RaycastHit2D hit in hits) {
+            Destroy(hit.collider.gameObject);
+        }
         foreach(GameObject i in UInodes)
             Destroy(i);
     }
