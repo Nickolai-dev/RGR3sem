@@ -1,2 +1,7 @@
 ProjectSettings/*
+
 Library/*
+
+*.userprefs
+*.lock
+Temp/*
