@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 public class Manage : MonoBehaviour {
-
+    public float wallWidth = 1.0f;
     private Camera cam;
     GraphicRaycaster m_Raycaster;
     PointerEventData m_PointerEventData;
@@ -56,11 +56,27 @@ public class Manage : MonoBehaviour {
             state = st_.DEFAULT;
     }
     void MapStart() {
-        float T = 0, B = -0, L = -0, R = 0;
+        float T = -1000, B = 1000, L = 1000, R = -1000;
         foreach(GameObject g in GameObject.FindGameObjectsWithTag("Wall")) {
-            if(g.transform.position.x < )
+            if (g.transform.position.x <= L) L = g.transform.position.x;
+            if (g.transform.position.x >= R) R = g.transform.position.x;
+            if (g.transform.position.y <= B) B = g.transform.position.y;
+            if (g.transform.position.y >= T) T = g.transform.position.y;
         }
+        GameObject limL = GameObject.Find("limiterL"),
+                   limR = GameObject.Find("limiterR"),
+                   limB = GameObject.Find("limiterB"),
+                   limT = GameObject.Find("limiterT");
+        limL.transform.position = new Vector3(L+wallWidth/2, 0, 0);
+        limR.transform.position = new Vector3(R-wallWidth/2, 0, 0);
+        limB.transform.position = new Vector3(0, B+wallWidth/2, 0);
+        limT.transform.position = new Vector3(0, T-wallWidth/2, 0);
+        limL.GetComponent<SpriteRenderer>().enabled = false;
+        limR.GetComponent<SpriteRenderer>().enabled = false;
+        limB.GetComponent<SpriteRenderer>().enabled = false;
+        limT.GetComponent<SpriteRenderer>().enabled = false;
         gameObject.SendMessage("InitNavMesh");
+        gameObject.SendMessage("SpawnPeoples");
 
     }
     void FireStart() { Debug.Log("Start"); }

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Behaviour : MonoBehaviour {
 
+    public bool ignoreDoors = false;
 	// Use this for initialization
 	void Start () {
 		
@@ -13,4 +14,16 @@ public class Behaviour : MonoBehaviour {
 	void Update () {
 		
 	}
+
+    void OnTriggerEnter2D(Collider2D collision) {
+        
+    }
+
+    IEnumerator DoorsInactiveByTime() {
+        ignoreDoors = true;
+        yield return new WaitForSeconds(3);
+        ignoreDoors = false;
+        yield break;
+    }
+
 }

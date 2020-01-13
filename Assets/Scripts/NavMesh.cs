@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class NavMesh : MonoBehaviour {
 
-    public float meshSize = 0.1f;// public GameObject aaaa;
+    public float meshSize = 0.1f;
+    public GameObject aaaa;
     int[,] mesh;
     public GameObject limT, limR, limL, limB;
 	void InitNavMesh() {
