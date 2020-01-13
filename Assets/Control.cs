@@ -16,7 +16,7 @@ public class Control : MonoBehaviour {
         velocity.Normalize(); velocity *= 10;
     }
     void FixedUpdate () {
-        gameObject.GetComponent<Rigidbody2D>().velocity = velocity;
+        gameObject.GetComponent<Rigidbody2D>().AddForce( velocity);
         //Debug.Log(velocity);
 	}
 }
