@@ -13,11 +13,16 @@ public class Behaviour : MonoBehaviour {
     public bool ignoreDoors = false;
     public MobFactory mobFactory;
     List<Vert> open, closed;
+    List<Vector2Int> path;
     Vector2 pursuitPoint = new Vector2();
 
+    public GameObject aaaa;
     void Start() {
         StartCoroutine(changePPoint());
         FindTheWay();
+        foreach (Vector2Int pos in path)
+            Instantiate(aaaa, mobFactory.nav.gridToRealCoords(pos), new Quaternion());
+
     }
 
     protected void FindTheWay() {
@@ -38,11 +43,21 @@ public class Behaviour : MonoBehaviour {
                     Vector2Int doubt = new Vector2Int(current.v.x+q, current.v.y+i);
                     if(pass==0 && !closed.Exists((Vert v) => { return v.v == doubt; })) {
                         open.Add( new Vert(doubt, current) );
+                        if(doubt == mobFactory.nav.coordToGridValues(pursuitPoint)) {
+                            path = new List<Vector2Int>();
+                            path.Add(current.v);
+                            while(current.p != null) {
+                                current = current.p;
+                                path.Add(current.v);
+                            }
+                            return;
+                        }
                     }
                 }
             closed.Add( current );
 
         }
+        throw new System.TimeoutException("Can`t get a way.");
     } 
 
     void FixedUpdate() {
