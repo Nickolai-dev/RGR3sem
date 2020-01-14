@@ -5,18 +5,16 @@ using UnityEngine;
 public class Behaviour : MonoBehaviour {
 
     public bool ignoreDoors = false;
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    public MobFactory mobFactory;
+    List<Vector2Int> closed = new List<Vector2Int>(), open = new List<Vector2Int>();
+    Vector2 pursuitPoint = new Vector2();
 
-    void OnTriggerEnter2D(Collider2D collision) {
-        
+    void Start() {
+        StartCoroutine(changePPoint());
+    }
+
+    void FixedUpdate() {
+
     }
 
     IEnumerator DoorsInactiveByTime() {
@@ -25,5 +23,20 @@ public class Behaviour : MonoBehaviour {
         ignoreDoors = false;
         yield break;
     }
+    IEnumerator changePPoint() {
+        while(true) {
+            pursuitPoint = mobFactory.rndPoint();
+            yield return new WaitForSeconds(8);
+        }
+    }
 
+    private int Comparer(Vector2Int A, Vector2Int B) {
+        Vector2Int dest = mobFactory.nav.coordToGridValues(pursuitPoint);
+        A-=dest;
+        B-=dest;
+        int a = A.sqrMagnitude, b = B.sqrMagnitude;
+        if (a == b) return 0;
+        else if (a > b) return 1;
+        else return -1;
+    }
 }

@@ -6,7 +6,7 @@ public class NavMesh : MonoBehaviour {
 
     public float meshSize = 0.1f;
     public GameObject aaaa;
-    int[,] mesh;
+    public int[,] mesh;
     public GameObject limT, limR, limL, limB;
 	void InitNavMesh() {
         int width = (int)((limR.transform.position.x-limL.transform.position.x)/meshSize),
@@ -22,12 +22,12 @@ public class NavMesh : MonoBehaviour {
             }
     }
 
-    Vector2 gridToRealCoords(Vector2Int gv) {
+    public Vector2 gridToRealCoords(Vector2Int gv) {
         return new Vector2( limL.transform.position.x + gv.x*meshSize + meshSize/2,
                             limB.transform.position.y + gv.y*meshSize + meshSize/2);
     }
 
-    Vector2Int coordToGridValues(Vector2 coo) {
+    public Vector2Int coordToGridValues(Vector2 coo) {
         return new Vector2Int( (int)( (coo.x-meshSize/2-limL.transform.position.x)/meshSize ),
                                (int)( (coo.y-meshSize/2-limB.transform.position.y)/meshSize ) );
     }
