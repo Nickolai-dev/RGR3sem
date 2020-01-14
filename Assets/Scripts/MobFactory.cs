@@ -23,8 +23,8 @@ public class MobFactory : MonoBehaviour {
     }
     void SpawnPeoples() {
         NavMesh nav = GetComponent<NavMesh>();
-        float x0 = nav.limR.transform.position.x, x1 = nav.limL.transform.position.x,
-              y0 = nav.limB.transform.position.y, y1 = nav.limT.transform.position.y;
+        x0 = nav.limR.transform.position.x; x1 = nav.limL.transform.position.x;
+        y0 = nav.limB.transform.position.y; y1 = nav.limT.transform.position.y;
         for (int i = 0; i < StartSpawn; i++) {
             Instantiate(mob, rndPoint(), new Quaternion()).GetComponent<Behaviour>().mobFactory = this;
             mobCount++;
@@ -51,8 +51,10 @@ public class MobFactory : MonoBehaviour {
         while (true) {
             v = new Vector3(Random.Range(x0, x1), Random.Range(y0, y1), 0);
             gv = nav.coordToGridValues(v);
-            if (nav.mesh[gv.y, gv.x] == 0)
-                return v;
+            try {
+                if (nav.mesh[gv.y, gv.x] == 0)
+                    return v;
+            } catch (System.IndexOutOfRangeException e) { Debug.Log("outOfRng"); }
         }
     }
 }

@@ -55,7 +55,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 2
+  m_LinearDrag: 1.05
   m_AngularDrag: 0.05
   m_GravityScale: 1
   m_Material: {fileID: 6200000, guid: a3e0f2feedb5e4741bdc803249f22e0b, type: 2}
@@ -89,6 +89,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8635f3bc0fa8313418c04277f946b65d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ignoreDoors: 0
+  mobFactory: {fileID: 0}
 --- !u!212 &212284475385414388
 SpriteRenderer:
   m_ObjectHideFlags: 1
