@@ -54,7 +54,7 @@ public class MobFactory : MonoBehaviour {
             try {
                 if (nav.mesh[gv.y, gv.x] == 0)
                     return v;
-            } catch (System.IndexOutOfRangeException e) { Debug.Log("outOfRng"); }
+            } catch (System.IndexOutOfRangeException) { Debug.Log("outOfRng"); }
         }
     }
 }

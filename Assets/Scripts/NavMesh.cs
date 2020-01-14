@@ -7,9 +7,10 @@ public class NavMesh : MonoBehaviour {
     public float meshSize = 0.1f;
     public GameObject aaaa;
     public int[,] mesh;
+    public int width, height;
     public GameObject limT, limR, limL, limB;
 	void InitNavMesh() {
-        int width = (int)((limR.transform.position.x-limL.transform.position.x)/meshSize),
+        width = (int)((limR.transform.position.x - limL.transform.position.x) / meshSize);
             height = (int)((limT.transform.position.y-limB.transform.position.y)/meshSize);
         mesh = new int[height, width]; // zeros by default, certainly
         for(int i = 0; i < height; i++)

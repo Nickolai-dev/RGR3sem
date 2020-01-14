@@ -12,8 +12,7 @@ public class Behaviour : MonoBehaviour {
 
     public bool ignoreDoors = false;
     public MobFactory mobFactory;
-    List<Vector2Int> closed;
-    List<Vert> open;
+    List<Vert> open, closed;
     Vector2 pursuitPoint = new Vector2();
 
     void Start() {
@@ -22,7 +21,7 @@ public class Behaviour : MonoBehaviour {
     }
 
     protected void FindTheWay() {
-        closed = new List<Vector2Int>();
+        closed = new List<Vert>();
         open = new List<Vert>();
         Vert start = new Vert(mobFactory.nav.coordToGridValues(transform.position), null), current;
         open.Add( start );
@@ -30,6 +29,18 @@ public class Behaviour : MonoBehaviour {
             open.Sort(Comparer);
             current = open[0];
             open.RemoveAt(0);
+            int pass = 1;
+            for(int i = -1; i < 2; i++)
+                for(int q = -1; q < 2; q++) {
+                    if((i==0)&&(q==0)) continue;
+                    try { pass = mobFactory.nav.mesh[current.v.y + i, current.v.x + q]; }
+                    catch (System.IndexOutOfRangeException) { continue; }
+                    Vector2Int doubt = new Vector2Int(current.v.x+q, current.v.y+i);
+                    if(pass==0 && !closed.Exists((Vert v) => { return v.v == doubt; })) {
+                        open.Add( new Vert(doubt, current) );
+                    }
+                }
+            closed.Add( current );
 
         }
     } 
