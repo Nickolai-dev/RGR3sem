@@ -13,25 +13,29 @@ public class Behaviour : MonoBehaviour {
     public bool ignoreDoors = false;
     public MobFactory mobFactory;
     List<Vert> open, closed;
-    List<Vector2Int> path;
+    List<Vector2Int> path = new List<Vector2Int>();
     Vector2 pursuitPoint = new Vector2();
 
     public GameObject aaaa;
     void Start() {
-        StartCoroutine(changePPoint());
+        //StartCoroutine(changePPoint());
+        //StartCoroutine(c_FindTheWay());
         FindTheWay();
-        foreach (Vector2Int pos in path)
-            Instantiate(aaaa, mobFactory.nav.gridToRealCoords(pos), new Quaternion());
+        
 
     }
 
-    protected void FindTheWay() {
+    protected virtual void FindTheWay() {
+        Debug.Log("fuck");
+        int ii = 0;
         closed = new List<Vert>();
         open = new List<Vert>();
         Vert start = new Vert(mobFactory.nav.coordToGridValues(transform.position), null), current;
         open.Add( start );
         while(open.Count > 0) {
+            Debug.Log(gameObject.name + " " + ii);
             open.Sort(Comparer);
+            Debug.Log(gameObject.name + " " + ii);
             current = open[0];
             open.RemoveAt(0);
             int pass = 1;
@@ -50,6 +54,8 @@ public class Behaviour : MonoBehaviour {
                                 current = current.p;
                                 path.Add(current.v);
                             }
+                            foreach (Vector2Int pos in path)
+                                Instantiate(aaaa, mobFactory.nav.gridToRealCoords(pos), new Quaternion());
                             return;
                         }
                     }
@@ -57,7 +63,7 @@ public class Behaviour : MonoBehaviour {
             closed.Add( current );
 
         }
-        throw new System.TimeoutException("Can`t get a way.");
+        throw new System.TimeoutException("Can`t get a way");
     } 
 
     void FixedUpdate() {
@@ -75,6 +81,15 @@ public class Behaviour : MonoBehaviour {
             pursuitPoint = mobFactory.rndPoint();
             yield return new WaitForSeconds(8);
         }
+    }
+    IEnumerator c_safeCall(System.Action func) {
+        func();
+        yield break;
+    }
+    IEnumerator c_FindTheWay() {
+        Coroutine c = StartCoroutine(c_safeCall(FindTheWay));
+        yield return new WaitForSeconds(3);
+        if (c != null) { StopCoroutine(c); Debug.Log("Failed to path"); }
     }
 
     private int Comparer(Vert A, Vert B) {

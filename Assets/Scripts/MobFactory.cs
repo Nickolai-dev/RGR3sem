@@ -13,7 +13,6 @@ public class MobFactory : MonoBehaviour {
     GameObject[] doors;
     public NavMesh nav;
     float x0, y0, x1, y1;
-    Coroutine c_spawner = null;
     [Unity.Collections.ReadOnly]
     public int mobCount = 0;
 
@@ -26,10 +25,10 @@ public class MobFactory : MonoBehaviour {
         x0 = nav.limR.transform.position.x; x1 = nav.limL.transform.position.x;
         y0 = nav.limB.transform.position.y; y1 = nav.limT.transform.position.y;
         for (int i = 0; i < StartSpawn; i++) {
-            Instantiate(mob, rndPoint(), new Quaternion()).GetComponent<Behaviour>().mobFactory = this;
+            Instantiate(mob, /*rndPoint()*/new Vector3(-3, 0,0), new Quaternion()).GetComponent<Behaviour>().mobFactory = this;
             mobCount++;
         }
-        c_spawner = StartCoroutine(c_spawn());
+        StartCoroutine(c_spawn());
     }
 
     IEnumerator c_spawn() {

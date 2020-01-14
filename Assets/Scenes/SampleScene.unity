@@ -8541,6 +8541,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   meshSize: 0.2
   aaaa: {fileID: 1951233738273446, guid: 0f3930a07561fdc4a84626bfb9176e42, type: 2}
+  width: 0
+  height: 0
   limT: {fileID: 921250194}
   limR: {fileID: 526719391}
   limL: {fileID: 1054385281}
@@ -8596,9 +8598,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mob: {fileID: 1107769624570326, guid: 75532a3761bd65a4c891fb24918f6688, type: 2}
-  StartSpawn: 5
+  StartSpawn: 1
   spawnCount: 2
-  spawnRate: 5000
+  spawnRate: 9999999
   chanceOfHeroic: 5
   chanceOfPanicer: 5
   nav: {fileID: 0}
