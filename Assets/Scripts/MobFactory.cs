@@ -25,7 +25,7 @@ public class MobFactory : MonoBehaviour {
         x0 = nav.limR.transform.position.x; x1 = nav.limL.transform.position.x;
         y0 = nav.limB.transform.position.y; y1 = nav.limT.transform.position.y;
         for (int i = 0; i < StartSpawn; i++) {
-            Instantiate(mob, /*rndPoint()*/new Vector3(-3, 0,0), new Quaternion()).GetComponent<Behaviour>().mobFactory = this;
+            Instantiate(mob, rndPoint()/*new Vector3(-3, 0,0)*/, new Quaternion()).GetComponent<Behaviour>().mobFactory = this;
             mobCount++;
         }
         StartCoroutine(c_spawn());
