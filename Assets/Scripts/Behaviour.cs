@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 internal class Vert {
-    public Vert(Vector2Int _v, Vert _p) { v = _v; p = _p; }
+    public Vert(Vector2Int _v, Vert _p) { v = _v; p = _p; if(p == null) value=0; else value=p.value+(int)((p.v-v).magnitude*10); }
     public Vert(Vector2Int _v, Vert _p, int val) { v = _v; p = _p; value = val; }
     public Vector2Int v { get; set; }
     public Vert p { get; set; }
@@ -29,9 +29,31 @@ public class Behaviour : MonoBehaviour {
             mobFactory.nav.coordToGridValues(transform.position),
             mobFactory.nav.coordToGridValues(pursuitPoint));*/
 
-        
+        FindTheWay_v2();
+
         foreach (Vector2Int pos in path)
             Instantiate(aaaa, mobFactory.nav.gridToRealCoords(pos), new Quaternion());
+    }
+
+    List<Vert> selectNeighbours(ref Vert p) {
+        List<Vert> rez = new List<Vert>();
+        Vector2Int doubt;
+        for(int i = -1, pass; i < 2; i++)
+        for(int q = -1; q < 2; q++) {
+            if(i==0 && q==0) continue;
+            doubt = new Vector2Int(p.v.x+q, p.v.y+i);
+            if(   mobFactory.nav.mesh[p.v.y+i, p.v.x+q] == 0 && !closed.Exists( vert => vert.v == doubt )   ) {
+                rez.Add( new Vert(doubt, p) );
+                    /*/ critical
+                    foreach (Vert vert in open.FindAll(vert => vert.v == doubt))
+                    {
+                        if (vert.value < p.value + (int)((p.v - doubt).magnitude * 10))
+                            p = vert.p;
+                    }
+                    /*/
+                }
+            }
+        return rez;
     }
 
     protected virtual void FindTheWay_v2() {
@@ -39,6 +61,21 @@ public class Behaviour : MonoBehaviour {
         open = new List<Vert>();
         Vert start = new Vert(mobFactory.nav.coordToGridValues(transform.position), null), current;
         open.Add(start);
+        while (open.Count > 0) {
+            open.Sort(Comparer_v2);
+            current = open[0];
+            open.RemoveAt(0);
+            closed.Add(current);
+            if(current.v == mobFactory.nav.coordToGridValues(pursuitPoint)) {
+                path.Clear();
+                do {
+                    path.Add(current.v);
+                    current = current.p;
+                } while (current.p != null);
+                return;
+            }
+            open.AddRange(selectNeighbours(ref current));
+        }
     }
 
     protected virtual void FindTheWay() {
@@ -111,6 +148,14 @@ public class Behaviour : MonoBehaviour {
         else return -1;
     }
 
+    private int Comparer_v2(Vert A, Vert B) {
+        Vector2Int dest = mobFactory.nav.coordToGridValues(pursuitPoint);
+        Vector2Int v1 = A.v - dest, v2 = B.v - dest;
+        int a = (Mathf.Abs(v1.x) + Mathf.Abs(v1.y))*10 + A.value, b = (Mathf.Abs(v2.x) + Mathf.Abs(v2.y))*10 + B.value;
+        if (a == b) return 0;
+        else if (a > b) return 1;
+        else return -1;
+    }
     // 
     // Some interesting code (don`t works)
     // https://lsreg.ru/realizaciya-algoritma-poiska-a-na-c/
