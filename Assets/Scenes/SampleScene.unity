@@ -8539,7 +8539,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51e74ce28a8887244b8e2b09c99ad72e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  meshSize: 0.1
+  meshSize: 0.42
   aaaa: {fileID: 1951233738273446, guid: 0f3930a07561fdc4a84626bfb9176e42, type: 2}
   width: 0
   height: 0

@@ -80,6 +80,6 @@ public class Manage : MonoBehaviour {
 
     }
     void FireStart() { Debug.Log("Start"); }
-    void Reset() { Debug.Log("Reset"); }
+    void Reset() { foreach(GameObject g in GameObject.FindGameObjectsWithTag("EditorOnly")) Destroy(g); Debug.Log("Reset"); }
 
 }
