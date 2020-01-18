@@ -2,16 +2,87 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-internal class Vert {
-    public Vert(Vector2Int _v, Vert _p) { v = _v; p = _p; if(p == null) value=0; else value=p.value+(int)((p.v-v).magnitude*10); }
-    public Vert(Vector2Int _v, Vert _p, int val) { v = _v; p = _p; value = val; }
-    public Vector2Int v { get; set; }
-    public Vert p { get; set; }
-    public int value { get; set; }
-};
 
-public class Behaviour : MonoBehaviour {
+public class Behaviour : MonoBehaviour
+{
+    internal class Node {
+        public Vector2Int vector { get; set; }
+        public Node prev { get; set; }
+        public int nodesTraversed { get {
+                int i = 0;
+                for (Node cur = this; cur.prev != null; cur = cur.prev)
+                { i+= (cur.vector-cur.prev.vector).sqrMagnitude > 1 ? 14 : 10; }
+                return i; } }
+    };
+    public bool ignoreDoors = false;
+    public MobFactory mobFactory;
+    List<Node> open, closed;
+    List<Vector2Int> path = new List<Vector2Int>();
+    Vector2 pursuitPoint = new Vector2();
 
+    public GameObject aaaa;
+    void Start() {
+
+        StartCoroutine(FindTheWay());
+
+        foreach (Vector2Int pos in path)
+            Instantiate(aaaa, mobFactory.nav.gridToRealCoords(pos), new Quaternion());
+    }
+
+    IEnumerator FindTheWay() {
+        closed = new List<Node>();
+        open = new List<Node>();
+        Node start = new Node(){vector=mobFactory.nav.coordToGridValues(transform.position), prev=null}, current;
+        open.Add(start);
+        List<Vector2Int> nbrs;
+        while (open.Count > 0) {
+            open.Sort(Comparer);
+            current = open[0];
+            closed.Add(current);
+            open.Remove(current);
+            nbrs = getNeighbours(current, mobFactory.nav.mesh);
+            foreach(Vector2Int i in nbrs) {
+                //yield return new WaitForSeconds(0.0f);
+                //Instantiate(aaaa, mobFactory.nav.gridToRealCoords(i), new Quaternion()).GetComponent<SpriteRenderer>().color = new Color(1,0,0);
+            }
+            yield break;//return;
+        }
+    }
+    private int Comparer(Node A, Node B) {
+        Vector2Int dest = mobFactory.nav.coordToGridValues(pursuitPoint);
+        Vector2Int v1 = A.vector-dest, v2 = B.vector-dest;
+        int a = v1.x+v1.y, b = v2.x+v2.y;
+        a*=10; b*=10;
+        a+=A.nodesTraversed; b+=B.nodesTraversed;
+        if (a == b) return 0;
+        else if (a > b) return 1;
+        else return -1;
+    }
+    List<Vector2Int> getNeighbours(Node cur, int[,] field) {
+        List<Vector2Int> nbrs = new List<Vector2Int>();
+        foreach(int i in new int[]{-1, 0, 1})
+            foreach(int q in new int[]{-1, 0, 1}){
+                if(i==0 && q==0) continue;
+                Vector2Int doubt = new Vector2Int(cur.vector.x + q, cur.vector.y + i);
+                try {
+                    if( field[cur.vector.y+i, cur.vector.x+q] == 0
+                        && !closed.Exists(node => node.vector == doubt) ) {
+                        nbrs.Add(doubt);
+                    }
+                } catch (System.IndexOutOfRangeException) { Debug.Log("Out of boundary"); }
+            }
+        return nbrs;
+    }
+}
+
+    public class Behaviour2 : MonoBehaviour {
+    internal class Vert {
+        public Vert(Vector2Int _v, Vert _p) { v = _v; p = _p; if(p == null) value=0; else value=p.value+(int)((p.v-v).magnitude*10); }
+        public Vert(Vector2Int _v, Vert _p, int val) { v = _v; p = _p; value = val; }
+        public Vector2Int v { get; set; }
+        public Vert p { get; set; }
+        public int value { get; set; }
+    };
     public bool ignoreDoors = false;
     public MobFactory mobFactory;
     List<Vert> open, closed;
@@ -38,7 +109,7 @@ public class Behaviour : MonoBehaviour {
     List<Vert> selectNeighbours(ref Vert p) {
         List<Vert> rez = new List<Vert>();
         Vector2Int doubt;
-        for(int i = -1, pass; i < 2; i++)
+        for(int i = -1; i < 2; i++)
         for(int q = -1; q < 2; q++) {
             if(i==0 && q==0) continue;
             doubt = new Vector2Int(p.v.x+q, p.v.y+i);
@@ -52,7 +123,7 @@ public class Behaviour : MonoBehaviour {
                     }
                     /*/
                 }
-            }
+        }
         return rez;
     }
 
