@@ -36,6 +36,7 @@ public class Behaviour : MonoBehaviour
         open.Add(start);
         List<Vector2Int> nbrs;
         while (open.Count > 0) {
+            //if(Random.Range(0,1) == 1) open.Reverse(); // randomize equal paths
             open.Sort(Comparer);
             current = open[0];
             closed.Add(current);
@@ -44,6 +45,13 @@ public class Behaviour : MonoBehaviour
             foreach(Vector2Int i in nbrs) {
                 //yield return new WaitForSeconds(0.0f);
                 //Instantiate(aaaa, mobFactory.nav.gridToRealCoords(i), new Quaternion()).GetComponent<SpriteRenderer>().color = new Color(1,0,0);
+                Node variant = new Node() { vector = i, prev = current };
+                Node mbHaveAlrdy = open.Find(node => node.vector == i);
+                if ( mbHaveAlrdy == null ) { // if not exists in open
+                    open.Add(variant);
+                } else {
+
+                }
             }
             yield break;//return;
         }
