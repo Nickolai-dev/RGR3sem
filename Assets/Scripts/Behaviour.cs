@@ -16,23 +16,23 @@ public class Behaviour : MonoBehaviour
     };
     public bool ignoreDoors = false;
     public MobFactory mobFactory;
-    List<Node> open, closed;
+    List<Node> open = new List<Node>(), closed = new List<Node>();
     List<Vector2Int> path = new List<Vector2Int>();
     Vector2 pursuitPoint = new Vector2();
 
     public GameObject aaaa;
     void Start() {
+        IEnumerator coroutineHandler = FindTheWay();
+        StartCoroutine(protectFromLoop(coroutineHandler));
+        StartCoroutine(coroutineHandler);
 
-        StartCoroutine(FindTheWay());
-
-        foreach (Vector2Int pos in path)
-            Instantiate(aaaa, mobFactory.nav.gridToRealCoords(pos), new Quaternion());
     }
 
     IEnumerator FindTheWay() {
-        closed = new List<Node>();
-        open = new List<Node>();
+        closed.Clear();
+        open.Clear();
         Node start = new Node(){vector=mobFactory.nav.coordToGridValues(transform.position), prev=null}, current;
+        Vector2Int end = mobFactory.nav.coordToGridValues(pursuitPoint);
         open.Add(start);
         List<Vector2Int> nbrs;
         while (open.Count > 0) {
@@ -50,11 +50,26 @@ public class Behaviour : MonoBehaviour
                 if ( mbHaveAlrdy == null ) { // if not exists in open
                     open.Add(variant);
                 } else {
-
+                    if( current.nodesTraversed
+                        + ( (current.vector-mbHaveAlrdy.vector).sqrMagnitude>1 ? 14 : 10 )
+                        < mbHaveAlrdy.nodesTraversed ) { // if path is shorter (through current to mbHaveAlrdy)
+                        mbHaveAlrdy.prev = current;
+                    }
+                }
+                if(i == end) {
+                    path.Clear();
+                    path.Add(end);
+                    while(current!=null) {
+                        path.Add(current.vector);
+                        current = current.prev;
+                    }
+                    foreach (Vector2Int pos in path)
+                        Instantiate( aaaa, mobFactory.nav.gridToRealCoords(pos), new Quaternion() );
+                    yield break;
                 }
             }
-            yield break;//return;
         }
+        throw new System.InvalidOperationException("Can`t find a path. Probably it doesn`t exist");
     }
     private int Comparer(Node A, Node B) {
         Vector2Int dest = mobFactory.nav.coordToGridValues(pursuitPoint);
@@ -80,6 +95,15 @@ public class Behaviour : MonoBehaviour
                 } catch (System.IndexOutOfRangeException) { Debug.Log("Out of boundary"); }
             }
         return nbrs;
+    }
+    IEnumerator protectFromLoop(IEnumerator coroutineHandler) {
+        float timeout = 3.0f;
+        yield return new WaitForSeconds(timeout);
+        if(coroutineHandler != null) {
+            StopCoroutine(coroutineHandler);
+            throw new System.TimeoutException("Bad loop: " + timeout + "s exceeded");
+        }
+        yield break;
     }
 }
 
