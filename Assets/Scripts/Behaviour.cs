@@ -10,7 +10,7 @@ public class Behaviour : MonoBehaviour {
         public int nodesTraversed { get {
                 int i = 0;
                 for (Node cur = this; cur.prev != null; cur = cur.prev)
-                { i+= (cur.vector-cur.prev.vector).sqrMagnitude > 1 ? 14 : 10; }
+                { i += (cur.vector - cur.prev.vector).sqrMagnitude > 1 ? 14 : 10; }
                 return i; } }
     };
     public bool ignoreDoors = false;
@@ -24,9 +24,22 @@ public class Behaviour : MonoBehaviour {
         IEnumerator coroutineHandler = FindTheWay();
         //StartCoroutine(protectFromLoop(coroutineHandler));
         StartCoroutine(coroutineHandler);
+
+    }
+
+    void controllableEvacuation() {
+        pursuitPoint = mobFactory.nav.doors[0];
+        Vector3? v = pursuitPoint;
+        do {
+            pursuitPoint = v.Value;
+            v = mobFactory.nav.doors.Find(any => (any-transform.position).sqrMagnitude < (v.Value-transform.position).sqrMagnitude   );
+        } while(v.HasValue); // while exists shorter
+
     }
 
     IEnumerator FindTheWay() {
+        int kostyl = 0,
+            kostylFrames = 30; // adjust; 30 seems to be optimum
         closed.Clear();
         open.Clear();
         Node start = new Node(){vector=mobFactory.nav.coordToGridValues(transform.position), prev=null}, current;
@@ -34,15 +47,16 @@ public class Behaviour : MonoBehaviour {
         open.Add(start);
         List<Vector2Int> nbrs;
         while (open.Count > 0) {
-            //if(Random.Range(0,1) == 1) open.Reverse(); // randomize equal paths
+            //if(Random.Range(0,1) == 1) open.Reverse(); // randomize equal paths (if it really need)
             open.Sort(Comparer1);
             current = open[0];
             closed.Add(current);
             open.RemoveAt(0);
             //Instantiate( aaaa, mobFactory.nav.gridToRealCoords(current.vector), new Quaternion() )
             //    .GetComponent<SpriteRenderer>().color = new Color(Random.value, Random.value, Random.value);
-            //yield return new WaitForFixedUpdate();//WaitForSeconds(0.0f);
-            nbrs = getNeighbours(current, mobFactory.nav.mesh);
+            //yield return null;
+            if(kostyl >= kostylFrames) { yield return null; } kostyl++;
+            nbrs = getNeighbours(current);
             foreach(Vector2Int i in nbrs) {
                 Node variant = new Node() { vector = i, prev = current };
                 Node mbHaveAlrdy = open.Find(node => node.vector == i);
@@ -84,14 +98,26 @@ public class Behaviour : MonoBehaviour {
         int a = (int)(v1.magnitude*10)+A.nodesTraversed, b = (int)(v2.magnitude*10)+B.nodesTraversed;
         return (a == b ? 0 : (a > b ? 1 : -1));
     }
-    List<Vector2Int> getNeighbours(Node cur, int[,] field) {
+    private int Comparer3(Node A, Node B) {
+        int manhattanKoeffStrt = 10, manhattanKoeffDiagonal = 14;
+        Vector2Int dest = mobFactory.nav.coordToGridValues(pursuitPoint);
+        Vector2Int v1 = A.vector-dest, v2 = B.vector-dest;
+        int a = Mathf.Abs(Mathf.Abs(v1.x) - Mathf.Abs(v1.y))*manhattanKoeffStrt
+            + Mathf.Min(Mathf.Abs(v1.x), Mathf.Abs(v1.y))*manhattanKoeffDiagonal
+            + A.nodesTraversed,
+            b = (Mathf.Abs(v2.x)+ Mathf.Abs(v2.y))*manhattanKoeffStrt
+            + Mathf.Min(Mathf.Abs(v2.x), Mathf.Abs(v2.y)) * manhattanKoeffDiagonal
+            + B.nodesTraversed;
+        return (a == b ? 0 : (a > b ? 1 : -1));
+    }
+    List<Vector2Int> getNeighbours(Node cur) {
         List<Vector2Int> nbrs = new List<Vector2Int>();
         foreach(int i in new int[]{-1, 0, 1})
             foreach(int q in new int[]{-1, 0, 1}){
                 if(i==0 && q==0) continue;
                 Vector2Int doubt = new Vector2Int(cur.vector.x + q, cur.vector.y + i);
                 try {
-                    if( field[cur.vector.y+i, cur.vector.x+q] == 0
+                    if( mobFactory.nav.mesh[cur.vector.y+i, cur.vector.x+q] == 0
                         && !closed.Exists(node => node.vector == doubt) ) {
                         nbrs.Add(doubt);
                     }
@@ -107,6 +133,22 @@ public class Behaviour : MonoBehaviour {
             throw new System.TimeoutException("Bad loop: " + timeout + "s exceeded");
         }
         yield break;
+    }
+
+
+
+
+    IEnumerator DoorsInactiveByTime() {
+        ignoreDoors = true;
+        yield return new WaitForSeconds(3);
+        ignoreDoors = false;
+        yield break;
+    }
+    IEnumerator changePPoint() {
+        while (true) {
+            pursuitPoint = mobFactory.rndPoint();
+            yield return new WaitForSeconds(8);
+        }
     }
 }
 

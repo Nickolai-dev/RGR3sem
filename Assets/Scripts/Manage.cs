@@ -67,10 +67,10 @@ public class Manage : MonoBehaviour {
                    limR = GameObject.Find("limiterR"),
                    limB = GameObject.Find("limiterB"),
                    limT = GameObject.Find("limiterT");
-        limL.transform.position = new Vector3(L+wallWidth/2, 0, 0);
-        limR.transform.position = new Vector3(R-wallWidth/2, 0, 0);
-        limB.transform.position = new Vector3(0, B+wallWidth/2, 0);
-        limT.transform.position = new Vector3(0, T-wallWidth/2, 0);
+        limL.transform.position = new Vector3(L-wallWidth/2, 0, 0);
+        limR.transform.position = new Vector3(R+wallWidth/2, 0, 0);
+        limB.transform.position = new Vector3(0, B-wallWidth/2, 0);
+        limT.transform.position = new Vector3(0, T+wallWidth/2, 0);
         limL.GetComponent<SpriteRenderer>().enabled = false;
         limR.GetComponent<SpriteRenderer>().enabled = false;
         limB.GetComponent<SpriteRenderer>().enabled = false;

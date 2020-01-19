@@ -9,10 +9,13 @@ public class NavMesh : MonoBehaviour {
     public int[,] mesh;
     public int width, height;
     public GameObject limT, limR, limL, limB;
+    public List<Vector3> doors = new List<Vector3>();
 	void InitNavMesh() {
         width = (int)((limR.transform.position.x - limL.transform.position.x) / meshSize);
             height = (int)((limT.transform.position.y-limB.transform.position.y)/meshSize);
         mesh = new int[height, width]; // zeros by default, certainly
+        doors.Clear();
+        foreach(GameObject g in GameObject.FindGameObjectsWithTag("Finish")) { doors.Add(g.transform.position); }
         for(int i = 0; i < height; i++)
             for(int q = 0; q < width; q++) {
                 foreach(RaycastHit2D hit in Physics2D.RaycastAll(gridToRealCoords(new Vector2Int(q, i)), new Vector2()))
@@ -24,12 +27,12 @@ public class NavMesh : MonoBehaviour {
     }
 
     public Vector2 gridToRealCoords(Vector2Int gv) {
-        return new Vector2( limL.transform.position.x + gv.x*meshSize + meshSize/2,
-                            limB.transform.position.y + gv.y*meshSize + meshSize/2);
+        return new Vector2( limL.transform.position.x + gv.x*meshSize,
+                            limB.transform.position.y + gv.y*meshSize);
     }
 
     public Vector2Int coordToGridValues(Vector2 coo) {
-        return new Vector2Int( (int)( (coo.x-meshSize/2-limL.transform.position.x)/meshSize ),
-                               (int)( (coo.y-meshSize/2-limB.transform.position.y)/meshSize ) );
+        return new Vector2Int( (int)Mathf.Round( (coo.x-limL.transform.position.x)/meshSize ),
+                               (int)Mathf.Round( (coo.y-limB.transform.position.y)/meshSize ) );
     }
 }
