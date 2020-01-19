@@ -21,18 +21,19 @@ public class Behaviour : MonoBehaviour {
     List<Node> open = new List<Node>(), closed = new List<Node>();
     List<Vector2Int> path = new List<Vector2Int>();
     Vector2 pursuitPoint = new Vector2();
+    IEnumerator h_FindTheWay = null;
 
     public GameObject TestingDot;
     void Start() {
         speed = normalSpeed;
-        IEnumerator coroutineHandler = FindTheWay();
+        //h_FindTheWay = FindTheWay();
         //StartCoroutine(protectFromLoop(coroutineHandler));
-        //StartCoroutine(changePPoint());
-        StartCoroutine(coroutineHandler);
+        StartCoroutine(setRandomPPointAndPath());
+        //StartCoroutine(h_FindTheWay);
 
     }
 
-    private void FixedUpdate() {
+    private void FixedUpdate() { 
         if (path.Count > 0)
             try {
                 moveToNextNode();
@@ -40,7 +41,10 @@ public class Behaviour : MonoBehaviour {
     }
 
     private void OnCollisionEnter2D(Collision2D collision) {
-        
+        if(h_FindTheWay != null) {
+            h_FindTheWay = FindTheWay();
+            StartCoroutine(h_FindTheWay);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {
@@ -114,12 +118,12 @@ public class Behaviour : MonoBehaviour {
                         path.Add(current.vector);
                         current = current.prev;
                     }
-                    foreach (Vector2Int pos in path)
-                        Instantiate( TestingDot, mobFactory.nav.gridToRealCoords(pos), new Quaternion() );
+                    h_FindTheWay = null; // it isnt null itself, so do it manually
                     yield break;
                 }
             }
         }
+        h_FindTheWay = null;
         throw new System.InvalidOperationException("Can`t find a path. Probably it doesn`t exist");
     }
     private int Comparer1(Node A, Node B) {
@@ -182,11 +186,19 @@ public class Behaviour : MonoBehaviour {
         ignoreDoors = false;
         yield break;
     }
-    IEnumerator changePPoint() {
+    IEnumerator setRandomPPointAndPath() {
         while (true) {
             pursuitPoint = mobFactory.rndPoint();
-            yield return new WaitForSeconds(8);
+            if(h_FindTheWay == null) {
+                h_FindTheWay = FindTheWay();
+                StartCoroutine(h_FindTheWay);
+            }
+            yield return new WaitForSeconds(Random.Range(6,12));
         }
+    }
+    void displayPath() {
+        foreach (Vector2Int pos in path)
+            Instantiate(TestingDot, mobFactory.nav.gridToRealCoords(pos), new Quaternion());
     }
 }
 
