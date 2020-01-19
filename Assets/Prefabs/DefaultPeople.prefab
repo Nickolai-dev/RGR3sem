@@ -91,7 +91,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ignoreDoors: 0
   mobFactory: {fileID: 0}
-  aaaa: {fileID: 1951233738273446, guid: 0f3930a07561fdc4a84626bfb9176e42, type: 2}
+  effectiveTouchRadius: 0.51
+  effectiveSeeRadius: 3
+  canSeeTroughWalls: 1
+  normalSpeed: 5.24
+  evacSpeed: 2
+  TestingDot: {fileID: 1951233738273446, guid: 0f3930a07561fdc4a84626bfb9176e42, type: 2}
 --- !u!212 &212284475385414388
 SpriteRenderer:
   m_ObjectHideFlags: 1

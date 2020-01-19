@@ -5,7 +5,7 @@ using UnityEngine;
 public class NavMesh : MonoBehaviour {
 
     public float meshSize = 0.1f;
-    public GameObject aaaa;
+    public GameObject TestingDot;
     public int[,] mesh;
     public int width, height;
     public GameObject limT, limR, limL, limB;

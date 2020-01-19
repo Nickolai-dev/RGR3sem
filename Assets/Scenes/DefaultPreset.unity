@@ -10568,13 +10568,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   meshSize: 0.5
-  aaaa: {fileID: 1951233738273446, guid: 0f3930a07561fdc4a84626bfb9176e42, type: 2}
+  TestingDot: {fileID: 1951233738273446, guid: 0f3930a07561fdc4a84626bfb9176e42, type: 2}
   width: 0
   height: 0
   limT: {fileID: 921250194}
   limR: {fileID: 526719391}
   limL: {fileID: 1054385281}
   limB: {fileID: 1294629164}
+  doors: []
 --- !u!4 &2097276395
 Transform:
   m_ObjectHideFlags: 0

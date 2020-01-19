@@ -15,25 +15,63 @@ public class Behaviour : MonoBehaviour {
     };
     public bool ignoreDoors = false;
     public MobFactory mobFactory;
+    public float effectiveTouchRadius = 0.25f, effectiveSeeRadius = 3.0f;
+    public bool canSeeTroughWalls = true; // TODO : realize for "can`t see"
+    public float normalSpeed = 1, evacSpeed = 2;
     List<Node> open = new List<Node>(), closed = new List<Node>();
     List<Vector2Int> path = new List<Vector2Int>();
     Vector2 pursuitPoint = new Vector2();
 
-    public GameObject aaaa;
+    public GameObject TestingDot;
     void Start() {
+        speed = normalSpeed;
         IEnumerator coroutineHandler = FindTheWay();
         //StartCoroutine(protectFromLoop(coroutineHandler));
+        //StartCoroutine(changePPoint());
         StartCoroutine(coroutineHandler);
 
     }
 
+    private void FixedUpdate() {
+        if (path.Count > 0)
+            try {
+                moveToNextNode();
+            } catch(System.ArgumentOutOfRangeException e) { Debug.Log(e.ToString()); }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision) {
+        
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision) {
+        
+    }
+
     void controllableEvacuation() {
+        getDoorPosition(); // TODO : remove
+
+    }
+
+    void getDoorPosition() { // if can see or if read the sign
         pursuitPoint = mobFactory.nav.doors[0];
         Vector3? v = pursuitPoint;
         do {
             pursuitPoint = v.Value;
             v = mobFactory.nav.doors.Find(any => (any-transform.position).sqrMagnitude < (v.Value-transform.position).sqrMagnitude   );
         } while(v.HasValue); // while exists shorter
+
+    }
+
+    Vector3 nextPoint, direction; float speed;
+    void moveToNextNode() { // TODO : upgrade; it needs to be more precious, when peple touches pathpoint, that in path, but not next
+        getNextPoint: nextPoint = mobFactory.nav.gridToRealCoords(path[path.Count-1]);
+        if( (nextPoint-transform.position).magnitude <= effectiveTouchRadius ) {
+            path.RemoveAt(path.Count-1);
+            GetComponent<Rigidbody2D>().AddForce(-direction*speed*speed);
+            goto getNextPoint;
+        }
+        direction = (nextPoint-transform.position).normalized;
+        GetComponent<Rigidbody2D>().AddForce(direction*speed);
 
     }
 
@@ -77,7 +115,7 @@ public class Behaviour : MonoBehaviour {
                         current = current.prev;
                     }
                     foreach (Vector2Int pos in path)
-                        Instantiate( aaaa, mobFactory.nav.gridToRealCoords(pos), new Quaternion() );
+                        Instantiate( TestingDot, mobFactory.nav.gridToRealCoords(pos), new Quaternion() );
                     yield break;
                 }
             }
