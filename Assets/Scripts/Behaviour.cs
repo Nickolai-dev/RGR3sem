@@ -71,7 +71,7 @@ public class Behaviour : MonoBehaviour {
         getNextPoint: nextPoint = mobFactory.nav.gridToRealCoords(path[path.Count-1]);
         if( (nextPoint-transform.position).magnitude <= effectiveTouchRadius ) {
             path.RemoveAt(path.Count-1);
-            GetComponent<Rigidbody2D>().AddForce(-direction*speed*speed);
+            GetComponent<Rigidbody2D>().AddForce(-direction*speed*speed); // braking
             goto getNextPoint;
         }
         direction = (nextPoint-transform.position).normalized;
@@ -193,7 +193,7 @@ public class Behaviour : MonoBehaviour {
                 h_FindTheWay = FindTheWay();
                 StartCoroutine(h_FindTheWay);
             }
-            yield return new WaitForSeconds(Random.Range(6,12));
+            yield return new WaitForSeconds(Random.Range(4,8));
         }
     }
     void displayPath() {

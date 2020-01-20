@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 
 public class Manage : MonoBehaviour {
     public float wallWidth = 1.0f;
+    public Animator panel;
     private Camera cam;
     GraphicRaycaster m_Raycaster;
     PointerEventData m_PointerEventData;
@@ -49,6 +50,8 @@ public class Manage : MonoBehaviour {
     }
 
     void Redraw() {
+        panel.GetComponent<Animator>().enabled = true;
+        panel.SetBool("isHidden", !panel.GetBool("isHidden") );
         mouseNowPressingUIElement = true;
         if (state == st_.DEFAULT)
             state = st_.REDRAW;
