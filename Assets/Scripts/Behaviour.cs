@@ -184,6 +184,9 @@ public class Behaviour : MonoBehaviour {
         ignoreDoors = true;
         yield return new WaitForSeconds(3);
         ignoreDoors = false;
+        yield return new WaitForSeconds(Random.Range(20, 30)); // 
+        StopCoroutine("setRandomPPointAndPath");
+        getDoorPosition(); // and exit
         yield break;
     }
     IEnumerator setRandomPPointAndPath() {

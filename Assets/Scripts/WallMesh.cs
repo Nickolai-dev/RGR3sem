@@ -6,14 +6,22 @@ using System.Linq;
 public class WallMesh : MonoBehaviour {
 
     public float gridSize;
-    public GameObject Wall;
+    public GameObject Wall, Fire, Extinguisher, Door, Sign;
+    GameObject inst;
     List<Vector3> stagingNodes = new List<Vector3>();
     List<GameObject> UInodes = new List<GameObject>(); // TODO: make a tracing
 
+    void Start() {
+        inst = Wall;
+    }
     void FixedUpdate() {
         //there
     }
-
+    void setWall() { inst = Wall; }
+    void setExt() { inst = Extinguisher; }
+    void setFire() { inst = Fire; }
+    void setDoor() { inst = Door; }
+    void setSign() { inst = Sign; }
     void AssignWall(Vector3 pos) {
         pos = new Vector3(Mathf.RoundToInt(pos.x/gridSize)*gridSize, Mathf.RoundToInt(pos.y/gridSize)*gridSize, 0);
 
@@ -24,7 +32,7 @@ public class WallMesh : MonoBehaviour {
     void ConfirmWall() {
         stagingNodes = stagingNodes.Distinct().ToList();
         foreach (Vector3 pos in stagingNodes)
-            Instantiate(Wall, pos, new Quaternion());
+            Instantiate(inst, pos, new Quaternion());
         stagingNodes.Clear();
         foreach(GameObject i in UInodes)
             Destroy(i);
