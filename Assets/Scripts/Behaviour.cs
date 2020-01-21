@@ -52,10 +52,20 @@ public class Behaviour : MonoBehaviour {
     }
 
     void controllableEvacuation() {
-        StopAllCoroutines();
+        speed = evacSpeed;
+        //StopAllCoroutines();
         ignoreDoors = false;
-        getDoorPosition(); // TODO : remove
-        StartCoroutine(h_FindTheWay = FindTheWay());
+        //getDoorPosition(); // TODO : remove
+        //StartCoroutine(h_FindTheWay = FindTheWay());
+    }
+
+    bool once = true;
+    void knowPlan() {
+        if(speed == evacSpeed && once) { once = false;
+            StopAllCoroutines();
+            getDoorPosition();
+            StartCoroutine(h_FindTheWay = FindTheWay());
+        }
     }
 
     void getDoorPosition() { // if can see or if read the sign
@@ -73,6 +83,7 @@ public class Behaviour : MonoBehaviour {
         getNextPoint: nextPoint = mobFactory.nav.gridToRealCoords(path[path.Count-1]);
         if( (nextPoint-transform.position).magnitude <= effectiveTouchRadius ) {
             path.RemoveAt(path.Count-1);
+            if(GetComponent<Rigidbody2D>().mass < 10)
             GetComponent<Rigidbody2D>().AddForce(-direction*speed*speed); // braking
             goto getNextPoint;
         }

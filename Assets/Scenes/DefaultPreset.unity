@@ -7419,6 +7419,7 @@ GameObject:
   - component: {fileID: 690076066}
   - component: {fileID: 690076065}
   - component: {fileID: 690076064}
+  - component: {fileID: 690076067}
   m_Layer: 0
   m_Name: Sign(Clone) (1)
   m_TagString: Sign
@@ -7500,6 +7501,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 131
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &690076067
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 690076063}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dabaadeaaf7714340a425534504c6fc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &697610089
 GameObject:
   m_ObjectHideFlags: 0
@@ -11336,6 +11348,7 @@ GameObject:
   - component: {fileID: 1019659491}
   - component: {fileID: 1019659490}
   - component: {fileID: 1019659489}
+  - component: {fileID: 1019659492}
   m_Layer: 0
   m_Name: Sign(Clone)
   m_TagString: Sign
@@ -11417,6 +11430,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 130
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1019659492
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1019659488}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dabaadeaaf7714340a425534504c6fc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1028092189
 GameObject:
   m_ObjectHideFlags: 0
@@ -15151,6 +15175,7 @@ GameObject:
   - component: {fileID: 1370829845}
   - component: {fileID: 1370829844}
   - component: {fileID: 1370829843}
+  - component: {fileID: 1370829846}
   m_Layer: 0
   m_Name: Sign(Clone) (2)
   m_TagString: Sign
@@ -15232,6 +15257,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 132
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1370829846
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1370829842}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dabaadeaaf7714340a425534504c6fc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1403681793
 GameObject:
   m_ObjectHideFlags: 0
@@ -21692,6 +21728,8 @@ MonoBehaviour:
   wallWidth: 1
   panel: {fileID: 1491090733}
   mouseNowPressingUIElement: 0
+  Fire: {fileID: 1618538380370882, guid: 0cf13bc65a739a541b72f08edb079255, type: 2}
+  Smoke: {fileID: 1817646986083862, guid: 309a277cc5d764746852aa7e8cfc96a9, type: 2}
 --- !u!114 &2097276397
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21704,6 +21742,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gridSize: 1
+  smokeCount: 0
+  maxSmokeCount: 100
   Wall: {fileID: 1924727420919758, guid: b2c2360f943a38a4db9ce8c5c4dab66b, type: 2}
   Fire: {fileID: 1076339207497728, guid: 6bb5685c823d8e94e83a995f7dd2ac6e, type: 2}
   Extinguisher: {fileID: 1594735570481266, guid: e2a5c860ca83a05459b407fc012cd630,
@@ -21721,7 +21761,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a845c681bb3e6d148b0ef7bc12dd2039, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mob: {fileID: 1107769624570326, guid: 75532a3761bd65a4c891fb24918f6688, type: 2}
+  defaultMob: {fileID: 1107769624570326, guid: 75532a3761bd65a4c891fb24918f6688, type: 2}
+  panicker: {fileID: 1112411042014666, guid: 9af2db9ba6d56fd4d8fe702609dbd087, type: 2}
+  heroic: {fileID: 1107769624570326, guid: 75532a3761bd65a4c891fb24918f6688, type: 2}
   StartSpawn: 5
   spawnCount: 2
   spawnRate: 5000
@@ -21729,7 +21771,7 @@ MonoBehaviour:
   chanceOfPanicer: 5
   nav: {fileID: 0}
   mobCount: 0
-  maxMobCount: 50
+  maxMobCount: 100
 --- !u!1 &2103155800
 GameObject:
   m_ObjectHideFlags: 0

@@ -82,10 +82,18 @@ public class Manage : MonoBehaviour {
         gameObject.SendMessage("SpawnPeoples");
 
     }
+    public GameObject Fire, Smoke;
     void FireStart() {
         GetComponent<MobFactory>().StopAllCoroutines();
         foreach(GameObject g in GameObject.FindGameObjectsWithTag("People")) {
             g.SendMessage("controllableEvacuation");
+        }
+        Vector3 pos;
+        foreach(GameObject g in GameObject.FindGameObjectsWithTag("Fire")) {
+            pos = g.transform.position;
+            Destroy(g);
+            Instantiate(Fire, pos, new Quaternion());
+            Instantiate(Smoke, pos, new Quaternion());
         }
     }
     void Reset() { foreach(GameObject g in GameObject.FindGameObjectsWithTag("EditorOnly")) Destroy(g); Debug.Log("Reset"); }

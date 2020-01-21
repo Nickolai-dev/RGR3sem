@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MobFactory : MonoBehaviour {
 
-    public GameObject mob;
+    public GameObject defaultMob, panicker, heroic;
     public int StartSpawn = 5, // spawn momentally in random places
                spawnCount = 2, // spawned in doors
                spawnRate = 5000, // ms
@@ -25,7 +25,10 @@ public class MobFactory : MonoBehaviour {
         x0 = nav.limR.transform.position.x; x1 = nav.limL.transform.position.x;
         y0 = nav.limB.transform.position.y; y1 = nav.limT.transform.position.y;
         for (int i = 0; i < StartSpawn; i++) {
-            Instantiate(mob, rndPoint()/*new Vector3(-3, 0,0)*/, new Quaternion()).GetComponent<Behaviour>().mobFactory = this;
+            int a = Random.Range(0, 100);
+            Instantiate( (a > 100-chanceOfHeroic-chanceOfPanicer
+                ? defaultMob : (a<chanceOfPanicer? panicker: heroic) ),
+                rndPoint()/*new Vector3(-3, 0,0)*/, new Quaternion()).GetComponent<Behaviour>().mobFactory = this;
             mobCount++;
         }
         StartCoroutine(c_spawn());
@@ -36,7 +39,7 @@ public class MobFactory : MonoBehaviour {
             yield return new WaitForSeconds((float)spawnRate/1000);
             if(mobCount < maxMobCount)
             for (int i = 0; i < spawnCount; i++) {
-                GameObject people = Instantiate(mob, doors[Random.Range(0, doors.Length)].transform.position
+                GameObject people = Instantiate(defaultMob, doors[Random.Range(0, doors.Length)].transform.position
                     + new Vector3(Random.Range(-0.35f, 0.35f), Random.Range(-0.35f, 0.35f), 0), new Quaternion());
                 people.GetComponent<Behaviour>().StartCoroutine("DoorsInactiveByTime");
                 people.GetComponent<Behaviour>().mobFactory = this;

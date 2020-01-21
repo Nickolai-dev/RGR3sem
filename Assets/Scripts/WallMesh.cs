@@ -6,6 +6,7 @@ using System.Linq;
 public class WallMesh : MonoBehaviour {
 
     public float gridSize;
+    public int smokeCount = 0, maxSmokeCount = 100;
     public GameObject Wall, Fire, Extinguisher, Door, Sign;
     GameObject inst;
     List<Vector3> stagingNodes = new List<Vector3>();
@@ -23,7 +24,7 @@ public class WallMesh : MonoBehaviour {
     void setDoor() { inst = Door; }
     void setSign() { inst = Sign; }
     void AssignWall(Vector3 pos) {
-        pos = new Vector3(Mathf.RoundToInt(pos.x/gridSize)*gridSize, Mathf.RoundToInt(pos.y/gridSize)*gridSize, 0);
+        pos = cooToGrid(pos);
 
         if(stagingNodes.Count == 0 || stagingNodes.Last() != pos)
             stagingNodes.Add(pos);
@@ -46,5 +47,12 @@ public class WallMesh : MonoBehaviour {
         }
         foreach(GameObject i in UInodes)
             Destroy(i);
+    }
+
+    public Vector3 cooToGrid(Vector3 pos) {
+        return new Vector3(Mathf.RoundToInt(pos.x/gridSize)*gridSize, Mathf.RoundToInt(pos.y/gridSize)*gridSize, 0);
+    }
+    public Vector3 cooToGrid(Vector3 pos, Vector2 offset) {
+        return new Vector3(Mathf.RoundToInt(pos.x/gridSize+offset.x)*gridSize, Mathf.RoundToInt(pos.y/gridSize+offset.y)*gridSize, 0);
     }
 }

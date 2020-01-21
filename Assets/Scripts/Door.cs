@@ -14,5 +14,7 @@ public class Door : MonoBehaviour {
             Destroy(collision.gameObject);
             mobFactory.mobCount--;
         }
+        if(collision.gameObject.transform.parent!=null && collision.gameObject.transform.parent.tag == "People")
+            collision.transform.parent.gameObject.SendMessage("knowPlan"); // can read the plan on the doors; ok
     }
 }
