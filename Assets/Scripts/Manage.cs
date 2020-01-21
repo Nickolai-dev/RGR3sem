@@ -1,12 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 public class Manage : MonoBehaviour {
     public float wallWidth = 1.0f;
-    public Animator panel;
+    public Animator panel, panel2;
     private Camera mainCam;
     GraphicRaycaster m_Raycaster;
     PointerEventData m_PointerEventData;
@@ -116,6 +117,18 @@ public class Manage : MonoBehaviour {
         foreach (GameObject g in GameObject.FindGameObjectsWithTag("Fire")) Destroy(g);
         foreach (GameObject g in GameObject.FindGameObjectsWithTag("Smoke")) Destroy(g);
         foreach (GameObject g in GameObject.FindGameObjectsWithTag("People")) Destroy(g);
+        gameObject.GetComponent<MobFactory>().mobCount = 0;
+        gameObject.GetComponent<WallMesh>().smokeCount = 0;
     }
+
+    void Presets() {
+        panel2.GetComponent<Animator>().enabled = true;
+        panel2.SetBool("isHidden", !panel2.GetBool("isHidden"));
+    }
+    void sc1() { SceneManager.LoadScene(0); }
+    void sc2() { SceneManager.LoadScene(1); }
+    void sc3() { SceneManager.LoadScene(2); }
+    void sc4() { SceneManager.LoadScene(3); }
+    void sc5() { SceneManager.LoadScene(4); }
 
 }

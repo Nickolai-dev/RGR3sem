@@ -7,7 +7,7 @@ public class HeroicBehaviour : DefaultBehaviour {
 
     int gotExt = 0;
     private void OnTriggerEnter2D(Collider2D collision) {
-        if(collision.tag == "Extinguisher") { gotExt = 4;
+        if(collision.tag == "Extinguisher") { gotExt = 10;
             StopAllCoroutines();
             getDoorPosition();
             StartCoroutine(h_FindTheWay = FindTheWay());
@@ -39,7 +39,7 @@ public class HeroicBehaviour : DefaultBehaviour {
         lst.Sort((A, B) => {
             int a = (int)(A.transform.position-transform.position).sqrMagnitude,
                 b = (int)(B.transform.position-transform.position).sqrMagnitude;
-            return a < b ? 1 : a > b ? -1 : 0; });
+            return a > b ? 1 : a < b ? -1 : 0; });
         pursuitPoint = lst[0].transform.position;
     }
 }
