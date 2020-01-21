@@ -82,7 +82,12 @@ public class Manage : MonoBehaviour {
         gameObject.SendMessage("SpawnPeoples");
 
     }
-    void FireStart() { Debug.Log("Start"); }
+    void FireStart() {
+        GetComponent<MobFactory>().StopAllCoroutines();
+        foreach(GameObject g in GameObject.FindGameObjectsWithTag("People")) {
+            g.SendMessage("controllableEvacuation");
+        }
+    }
     void Reset() { foreach(GameObject g in GameObject.FindGameObjectsWithTag("EditorOnly")) Destroy(g); Debug.Log("Reset"); }
 
 }

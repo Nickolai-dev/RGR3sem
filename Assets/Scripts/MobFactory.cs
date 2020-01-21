@@ -14,7 +14,7 @@ public class MobFactory : MonoBehaviour {
     public NavMesh nav;
     float x0, y0, x1, y1;
     [Unity.Collections.ReadOnly]
-    public int mobCount = 0;
+    public int mobCount = 0, maxMobCount = 50;
 
     void Start() {
         doors = GameObject.FindGameObjectsWithTag("Finish");
@@ -34,6 +34,7 @@ public class MobFactory : MonoBehaviour {
     IEnumerator c_spawn() {
         while(true) {
             yield return new WaitForSeconds((float)spawnRate/1000);
+            if(mobCount < maxMobCount)
             for (int i = 0; i < spawnCount; i++) {
                 GameObject people = Instantiate(mob, doors[Random.Range(0, doors.Length)].transform.position
                     + new Vector3(Random.Range(-0.35f, 0.35f), Random.Range(-0.35f, 0.35f), 0), new Quaternion());

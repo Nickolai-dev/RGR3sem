@@ -30,7 +30,7 @@ public class Behaviour : MonoBehaviour {
         //StartCoroutine(protectFromLoop(coroutineHandler));
         StartCoroutine(setRandomPPointAndPath());
         //StartCoroutine(h_FindTheWay);
-
+        //controllableEvacuation();
     }
 
     private void FixedUpdate() { 
@@ -52,18 +52,20 @@ public class Behaviour : MonoBehaviour {
     }
 
     void controllableEvacuation() {
+        StopAllCoroutines();
+        ignoreDoors = false;
         getDoorPosition(); // TODO : remove
-
+        StartCoroutine(h_FindTheWay = FindTheWay());
     }
 
     void getDoorPosition() { // if can see or if read the sign
         pursuitPoint = mobFactory.nav.doors[0];
-        Vector3? v = pursuitPoint;
+        Vector3 v = pursuitPoint;
         do {
-            pursuitPoint = v.Value;
-            v = mobFactory.nav.doors.Find(any => (any-transform.position).sqrMagnitude < (v.Value-transform.position).sqrMagnitude   );
-        } while(v.HasValue); // while exists shorter
-
+            pursuitPoint = v;
+            v = mobFactory.nav.doors.Find(any => (any-transform.position).sqrMagnitude < (v-transform.position).sqrMagnitude   );
+        } while(v != default(Vector3)); // while exists shorter /// sory for (0,0,0) bug
+        Debug.Log(v);
     }
 
     Vector3 nextPoint, direction; float speed;

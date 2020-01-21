@@ -10,20 +10,40 @@ public class NavMesh : MonoBehaviour {
     public int width, height;
     public GameObject limT, limR, limL, limB;
     public List<Vector3> doors = new List<Vector3>();
+    IEnumerator h_check = null;
 	void InitNavMesh() {
         width = (int)((limR.transform.position.x - limL.transform.position.x) / meshSize);
             height = (int)((limT.transform.position.y-limB.transform.position.y)/meshSize);
         mesh = new int[height, width]; // zeros by default, certainly
         doors.Clear();
         foreach(GameObject g in GameObject.FindGameObjectsWithTag("Finish")) { doors.Add(g.transform.position); }
-        for(int i = 0; i < height; i++)
-            for(int q = 0; q < width; q++) {
-                foreach(RaycastHit2D hit in Physics2D.RaycastAll(gridToRealCoords(new Vector2Int(q, i)), new Vector2()))
-                    if(hit.transform.gameObject.tag != "People" && hit.transform.gameObject.tag != "Finish")
-                        mesh[i,q] = 1;
+        for (int i = 0; i < height; i++)
+            for (int q = 0; q < width; q++) {
+                foreach (RaycastHit2D hit in Physics2D.RaycastAll(gridToRealCoords(new Vector2Int(q, i)), new Vector2()))
+                    if ( hit.transform.gameObject.tag == "Wall"
+                        //|| hit.transform.gameObject.tag == "People" 
+                        )
+                        mesh[i, q] = 1;
                 //if (mesh[i, q] == 0)
                 //    Instantiate(aaaa, gridToRealCoords(new Vector2Int(q, i)), new Quaternion());
             }
+        if (h_check == null)StartCoroutine(h_check = c_check());
+    }
+
+    IEnumerator c_check() {
+        while(true) {
+            for(int i = 0; i < height; i++)
+                for(int q = 0; q < width; q++) {
+                    foreach(RaycastHit2D hit in Physics2D.RaycastAll(gridToRealCoords(new Vector2Int(q, i)), new Vector2()))
+                        if ( hit.transform.gameObject.tag == "Wall"
+                            //|| hit.transform.gameObject.tag == "People" 
+                            )
+                            mesh[i,q] = 1;
+                    //if (mesh[i, q] == 0)
+                    //    Instantiate(aaaa, gridToRealCoords(new Vector2Int(q, i)), new Quaternion());
+                }
+            yield return new WaitForSeconds(3);
+        }
     }
 
     public Vector2 gridToRealCoords(Vector2Int gv) {
