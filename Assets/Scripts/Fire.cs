@@ -5,7 +5,7 @@ using System.Linq;
 
 public class Fire : MonoBehaviour {
     WallMesh grid;
-    public float timeSpr = 8f;
+    public float timeSpr = 8f, damage = 10.0f;
 	protected void Start() {
         grid = GameObject.Find("root").GetComponent<WallMesh>();
         StartCoroutine(c_burn());
@@ -24,6 +24,25 @@ public class Fire : MonoBehaviour {
                 }
             }
             
+        }
+    }
+
+    List<GameObject> ppls = new List<GameObject>();
+    private void FixedUpdate() {
+        foreach(GameObject g in ppls) {
+            g.SendMessage("DoDamage", damage*Time.fixedDeltaTime);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision) {
+        if(collision.tag == "People") {
+            ppls.Add(collision.gameObject);
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision) {
+        if(collision.tag == "People") {
+            ppls.Remove(collision.gameObject);
         }
     }
 }

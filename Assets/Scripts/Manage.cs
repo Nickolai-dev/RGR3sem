@@ -7,29 +7,44 @@ using UnityEngine.EventSystems;
 public class Manage : MonoBehaviour {
     public float wallWidth = 1.0f;
     public Animator panel;
-    private Camera cam;
+    private Camera mainCam;
     GraphicRaycaster m_Raycaster;
     PointerEventData m_PointerEventData;
     EventSystem m_EventSystem;
     List<RaycastResult> m_result = new List<RaycastResult>();
     void Start() {
-        cam = Camera.main;
+        mainCam = GameObject.Find("Main Camera").GetComponent<Camera>();
         m_Raycaster = GameObject.Find("Canvas").GetComponent<GraphicRaycaster>();
         m_EventSystem = GameObject.Find("Canvas").GetComponent<EventSystem>();
         m_PointerEventData = new PointerEventData(m_EventSystem);
+        mainCam.enabled = false;
+        mainCam.enabled = true;
+
+        DontDestroyOnLoad(mainCam.gameObject);
+        DontDestroyOnLoad(GameObject.Find("root"));
+        DontDestroyOnLoad(GameObject.Find("Canvas"));
+        DontDestroyOnLoad(GameObject.Find("EventSystem"));
+        DontDestroyOnLoad(GameObject.Find("limiterL"));
+        DontDestroyOnLoad(GameObject.Find("limiterR"));
+        DontDestroyOnLoad(GameObject.Find("limiterB"));
+        DontDestroyOnLoad(GameObject.Find("limiterT"));
     }
 
     enum st_ { REDRAW, DEFAULT };
     private st_ state = st_.DEFAULT;
     public bool mouseNowPressingUIElement = false;
+
     void FixedUpdate() {
         if (!Input.GetMouseButton(0) ) mouseNowPressingUIElement = false;
+        float zoom = -Input.GetAxis("Mouse ScrollWheel")*2;
+        if (zoom + mainCam.orthographicSize < 15 && zoom + mainCam.orthographicSize > 5)
+            mainCam.orthographicSize += zoom;
         switch (state) {
             case st_.REDRAW: {
                 if(mouseNowPressingUIElement) break;
                 if (Input.GetMouseButton(0)) {
                     //Debug.Log(Input.mousePosition);
-                    Vector3 p = cam.ScreenToWorldPoint(Input.mousePosition);
+                    Vector3 p = mainCam.ScreenToWorldPoint(Input.mousePosition);
                     //RaycastHit2D[] hits = Physics2D.RaycastAll(p, new Vector2());
                     m_PointerEventData.position = Input.mousePosition;
                     m_Raycaster.Raycast(m_PointerEventData, m_result);
@@ -39,7 +54,7 @@ public class Manage : MonoBehaviour {
                     break;
                 }
                 if(Input.GetMouseButton(1)) { 
-                    gameObject.SendMessage("Cancel", cam.ScreenToWorldPoint(Input.mousePosition));
+                    gameObject.SendMessage("Cancel", mainCam.ScreenToWorldPoint(Input.mousePosition));
                 }
                 if(Input.GetMouseButtonUp(0)) {
                     gameObject.SendMessage("ConfirmWall");
@@ -96,6 +111,11 @@ public class Manage : MonoBehaviour {
             Instantiate(Smoke, pos, new Quaternion());
         }
     }
-    void Reset() { foreach(GameObject g in GameObject.FindGameObjectsWithTag("EditorOnly")) Destroy(g); Debug.Log("Reset"); }
+    void Reset() {
+        foreach (GameObject g in GameObject.FindGameObjectsWithTag("EditorOnly")) Destroy(g);
+        foreach (GameObject g in GameObject.FindGameObjectsWithTag("Fire")) Destroy(g);
+        foreach (GameObject g in GameObject.FindGameObjectsWithTag("Smoke")) Destroy(g);
+        foreach (GameObject g in GameObject.FindGameObjectsWithTag("People")) Destroy(g);
+    }
 
 }

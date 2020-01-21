@@ -1592,7 +1592,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: f64eeb4758fb8a646b2c3fa169363f29, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 0.56078434}
   m_FlipX: 0
@@ -2158,7 +2158,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: f64eeb4758fb8a646b2c3fa169363f29, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 0.56078434}
   m_FlipX: 0
@@ -4406,7 +4406,7 @@ Camera:
   m_TargetEye: 0
   m_HDR: 1
   m_AllowMSAA: 0
-  m_AllowDynamicResolution: 0
+  m_AllowDynamicResolution: 1
   m_ForceIntoRT: 0
   m_OcclusionCulling: 0
   m_StereoConvergence: 10
@@ -4641,7 +4641,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 526719391}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 29.21, y: 0, z: 0}
+  m_LocalPosition: {x: 69.7, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -10296,7 +10296,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 921250194}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 12.79, z: 0}
+  m_LocalPosition: {x: 0, y: 67, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -12102,7 +12102,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1054385281}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -26.97, y: 0, z: 0}
+  m_LocalPosition: {x: -68.28, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -13764,7 +13764,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: f64eeb4758fb8a646b2c3fa169363f29, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 0.56078434}
   m_FlipX: 0
@@ -13858,7 +13858,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1294629164}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -15.42, z: 0}
+  m_LocalPosition: {x: 0, y: -69.4, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -16841,7 +16841,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: f64eeb4758fb8a646b2c3fa169363f29, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 0.56078434}
   m_FlipX: 0
@@ -17320,6 +17320,7 @@ GameObject:
   - component: {fileID: 1572623096}
   - component: {fileID: 1572623095}
   - component: {fileID: 1572623094}
+  - component: {fileID: 1572623097}
   m_Layer: 0
   m_Name: Extinguisher(Clone)
   m_TagString: Extinguisher
@@ -17401,6 +17402,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 134
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1572623097
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1572623093}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dabaadeaaf7714340a425534504c6fc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1598898467
 GameObject:
   m_ObjectHideFlags: 0
@@ -21743,7 +21755,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gridSize: 1
   smokeCount: 0
-  maxSmokeCount: 100
+  maxSmokeCount: 250
   Wall: {fileID: 1924727420919758, guid: b2c2360f943a38a4db9ce8c5c4dab66b, type: 2}
   Fire: {fileID: 1076339207497728, guid: 6bb5685c823d8e94e83a995f7dd2ac6e, type: 2}
   Extinguisher: {fileID: 1594735570481266, guid: e2a5c860ca83a05459b407fc012cd630,
@@ -21763,7 +21775,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defaultMob: {fileID: 1107769624570326, guid: 75532a3761bd65a4c891fb24918f6688, type: 2}
   panicker: {fileID: 1112411042014666, guid: 9af2db9ba6d56fd4d8fe702609dbd087, type: 2}
-  heroic: {fileID: 1107769624570326, guid: 75532a3761bd65a4c891fb24918f6688, type: 2}
+  heroic: {fileID: 1724816319350646, guid: 2a9061780e542504a86a78f5160b90f5, type: 2}
   StartSpawn: 5
   spawnCount: 2
   spawnRate: 5000
@@ -21771,7 +21783,7 @@ MonoBehaviour:
   chanceOfPanicer: 5
   nav: {fileID: 0}
   mobCount: 0
-  maxMobCount: 100
+  maxMobCount: 90
 --- !u!1 &2103155800
 GameObject:
   m_ObjectHideFlags: 0

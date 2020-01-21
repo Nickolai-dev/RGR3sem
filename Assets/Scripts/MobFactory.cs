@@ -26,9 +26,9 @@ public class MobFactory : MonoBehaviour {
         y0 = nav.limB.transform.position.y; y1 = nav.limT.transform.position.y;
         for (int i = 0; i < StartSpawn; i++) {
             int a = Random.Range(0, 100);
-            Instantiate( (a > 100-chanceOfHeroic-chanceOfPanicer
-                ? defaultMob : (a<chanceOfPanicer? panicker: heroic) ),
-                rndPoint()/*new Vector3(-3, 0,0)*/, new Quaternion()).GetComponent<Behaviour>().mobFactory = this;
+            Instantiate( (a < 100-chanceOfHeroic-chanceOfPanicer
+                ? defaultMob : (a>100-chanceOfHeroic? heroic: panicker) ),
+                rndPoint()/*new Vector3(-3, 0,0)*/, new Quaternion()).GetComponent<DefaultBehaviour>().mobFactory = this;
             mobCount++;
         }
         StartCoroutine(c_spawn());
@@ -41,8 +41,8 @@ public class MobFactory : MonoBehaviour {
             for (int i = 0; i < spawnCount; i++) {
                 GameObject people = Instantiate(defaultMob, doors[Random.Range(0, doors.Length)].transform.position
                     + new Vector3(Random.Range(-0.35f, 0.35f), Random.Range(-0.35f, 0.35f), 0), new Quaternion());
-                people.GetComponent<Behaviour>().StartCoroutine("DoorsInactiveByTime");
-                people.GetComponent<Behaviour>().mobFactory = this;
+                people.GetComponent<DefaultBehaviour>().StartCoroutine("DoorsInactiveByTime");
+                people.GetComponent<DefaultBehaviour>().mobFactory = this;
                 mobCount++;
             }
         }

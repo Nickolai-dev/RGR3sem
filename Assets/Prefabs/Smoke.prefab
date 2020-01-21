@@ -100,6 +100,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeSpr: 4
+  damage: 6.5
 --- !u!212 &212360216504051814
 SpriteRenderer:
   m_ObjectHideFlags: 1

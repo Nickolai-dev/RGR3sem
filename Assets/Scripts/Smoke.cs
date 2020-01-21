@@ -5,7 +5,7 @@ using System.Linq;
 
 public class Smoke : MonoBehaviour {
     WallMesh grid;
-    public float timeSpr = 3f;
+    public float timeSpr = 3f, damage = 1.0f;
 
     protected void Start() {
         grid = GameObject.Find("root").GetComponent<WallMesh>();
@@ -27,6 +27,29 @@ public class Smoke : MonoBehaviour {
                 }else;else yield break;
             }
             
+        }
+    }
+    
+
+    List<GameObject> ppls = new List<GameObject>();
+    private void FixedUpdate() {
+        foreach(GameObject g in ppls) {
+            if (g.GetComponent<DefaultBehaviour>() == null) {
+                ppls.Remove(g); continue;
+            }
+            g.SendMessage("DoDamage", damage*Time.fixedDeltaTime);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision) {
+        if(collision.tag == "People") {
+            ppls.Add(collision.gameObject);
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision) {
+        if(collision.tag == "People") {
+            ppls.Remove(collision.gameObject);
         }
     }
 }

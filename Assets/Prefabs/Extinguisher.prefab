@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4175428195150780}
   - component: {fileID: 212282174428335060}
   - component: {fileID: 58765684639059116}
+  - component: {fileID: 114241592122625292}
   m_Layer: 0
   m_Name: Extinguisher
   m_TagString: Extinguisher
@@ -56,6 +57,17 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 1.8
+--- !u!114 &114241592122625292
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1594735570481266}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dabaadeaaf7714340a425534504c6fc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!212 &212282174428335060
 SpriteRenderer:
   m_ObjectHideFlags: 1

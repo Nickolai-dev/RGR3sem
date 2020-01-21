@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class Behaviour : MonoBehaviour {
+public class DefaultBehaviour : MonoBehaviour {
     internal class Node {
         public Vector2Int vector { get; set; }
         public Node prev { get; set; }
@@ -13,6 +13,7 @@ public class Behaviour : MonoBehaviour {
                 { i += (cur.vector - cur.prev.vector).sqrMagnitude > 1 ? 14 : 10; }
                 return i; } }
     };
+    private float hp = 100;
     public bool ignoreDoors = false;
     public MobFactory mobFactory;
     public float effectiveTouchRadius = 0.25f, effectiveSeeRadius = 3.0f;
@@ -20,8 +21,8 @@ public class Behaviour : MonoBehaviour {
     public float normalSpeed = 1, evacSpeed = 2;
     List<Node> open = new List<Node>(), closed = new List<Node>();
     List<Vector2Int> path = new List<Vector2Int>();
-    Vector2 pursuitPoint = new Vector2();
-    IEnumerator h_FindTheWay = null;
+    protected Vector2 pursuitPoint = new Vector2();
+    protected IEnumerator h_FindTheWay = null;
 
     public GameObject TestingDot;
     void Start() {
@@ -59,7 +60,7 @@ public class Behaviour : MonoBehaviour {
         //StartCoroutine(h_FindTheWay = FindTheWay());
     }
 
-    bool once = true;
+    protected bool once = true;
     void knowPlan() {
         if(speed == evacSpeed && once) { once = false;
             StopAllCoroutines();
@@ -68,7 +69,7 @@ public class Behaviour : MonoBehaviour {
         }
     }
 
-    void getDoorPosition() { // if can see or if read the sign
+    protected void getDoorPosition() { // if can see or if read the sign
         pursuitPoint = mobFactory.nav.doors[0];
         Vector3 v = pursuitPoint;
         do {
@@ -78,7 +79,7 @@ public class Behaviour : MonoBehaviour {
         Debug.Log(v);
     }
 
-    Vector3 nextPoint, direction; float speed;
+    Vector3 nextPoint, direction; protected float speed;
     void moveToNextNode() { // TODO : upgrade; it needs to be more precious, when peple touches pathpoint, that in path, but not next
         getNextPoint: nextPoint = mobFactory.nav.gridToRealCoords(path[path.Count-1]);
         if( (nextPoint-transform.position).magnitude <= effectiveTouchRadius ) {
@@ -92,7 +93,7 @@ public class Behaviour : MonoBehaviour {
 
     }
 
-    IEnumerator FindTheWay() {
+    protected IEnumerator FindTheWay() {
         int kostyl = 0,
             kostylFrames = 30; // adjust; 30 seems to be optimum
         closed.Clear();
@@ -215,6 +216,21 @@ public class Behaviour : MonoBehaviour {
     void displayPath() {
         foreach (Vector2Int pos in path)
             Instantiate(TestingDot, mobFactory.nav.gridToRealCoords(pos), new Quaternion());
+    }
+
+    void DoDamage(float dmg) {
+        hp-=dmg;
+        if(hp <= 0)
+            Die();
+    }
+
+    void Die() {
+        StopAllCoroutines();
+        GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
+        GetComponent<CircleCollider2D>().isTrigger = true;
+        GetComponent<SpriteRenderer>().color = new Color(0, 0, 0);
+        mobFactory.mobCount--;
+        Destroy(this);
     }
 }
 
